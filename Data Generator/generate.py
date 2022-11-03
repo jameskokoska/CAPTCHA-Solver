@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from random import randint, choice, uniform
 import string
+import time
 
 colors = {
   "black": 0x1c1c1c,
@@ -22,7 +23,7 @@ def get_text():
 
 def draw_pixel(draw,x,y, thickness):
   if(thickness > 1):
-    draw.line([(x, y), (x+1,y+1)], fill=colors["black"], width=thickness)
+    draw.line([(x, y), (x+thickness*([1,-1][randint(0, 1)]),y+thickness*([1,-1][randint(0, 1)]))], fill=colors["black"], width=thickness)
   else:
     draw.line([(x, y), (x,y)], fill=colors["black"])
 
@@ -41,7 +42,7 @@ def add_lines(draw, amount, thickness):
 
 def draw_characters(draw, image, text):
   
-  fonts = ["ComicSansMS3.ttf","typewriter.ttf"]
+  fonts = ["ComicSansMS3.ttf","carbontype.ttf","Kingthings_Trypewriter_2.ttf","Sears_Tower.ttf","TravelingTypewriter.ttf"]
   wiggle_room_width = 48 - len(text) * 6
   wiggle_room_height = 13
   width_padding = 30
@@ -69,16 +70,31 @@ def draw_characters(draw, image, text):
     next_letter_pos += spacing_width
   
 
-image = Image.new('RGB',(image_width, image_height))
-draw = ImageDraw.Draw(image)
-draw.rectangle([0, 0, image_width, image_height], fill=colors["white"])
+num_samples = input("How many images do you want to generate?")
+text_done = []
+start = time.time()
 
-text = get_text()
-draw_characters(draw, image, text)
+for i in range(int(num_samples)):
 
-add_noise(draw, amount=int(image_width*image_height*0.01), thickness = 1)
-add_noise(draw, amount=int(image_width*image_height*0.005), thickness = 2)
-add_noise(draw, amount=int(image_width*image_height*0.002), thickness = 3)
-add_lines(draw, amount=3, thickness=2)
+  image = Image.new('RGB',(image_width, image_height))
+  draw = ImageDraw.Draw(image)
+  draw.rectangle([0, 0, image_width, image_height], fill=colors["white"])
 
-image.save("./output/"+text+".jpg")
+  text = get_text()
+  if(text not in text_done):
+    text_done.append(text)
+  else:
+    print("Skipped")
+    continue
+  draw_characters(draw, image, text)
+
+  add_noise(draw, amount=int(image_width*image_height*0.007), thickness = 1)
+  add_noise(draw, amount=int(image_width*image_height*0.007), thickness = 2)
+  add_noise(draw, amount=int(image_width*image_height*0.002), thickness = 3)
+  add_lines(draw, amount=3, thickness=2)
+  add_lines(draw, amount=1, thickness=3)
+
+
+  image.save("./output/"+text+".jpg")
+end = time.time()
+print("Operation completed. Time taken: "+str(end - start)+" seconds")
