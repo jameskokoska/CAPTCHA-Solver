@@ -13,7 +13,7 @@ colors = {
 image_width = 250
 image_height = 70
 font_size = 50
-characters = [4,8]
+characters = [5,5]
 
 def get_text():
   out_string = ""
@@ -88,10 +88,10 @@ for i in range(int(num_samples)):
     continue
   draw_characters(draw, image, text)
 
-  add_noise(draw, amount=int(image_width*image_height*0.007), thickness = 1)
-  add_noise(draw, amount=int(image_width*image_height*0.007), thickness = 2)
-  add_noise(draw, amount=int(image_width*image_height*0.002), thickness = 3)
-  add_lines(draw, amount=3, thickness=2)
+  add_noise(draw, amount=int(image_width*image_height*0.001), thickness = 1)
+  add_noise(draw, amount=int(image_width*image_height*0.001), thickness = 2)
+  add_noise(draw, amount=int(image_width*image_height*0.001), thickness = 3)
+  add_lines(draw, amount=1, thickness=2)
   add_lines(draw, amount=1, thickness=3)
 
 
